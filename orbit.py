@@ -81,7 +81,7 @@ def main():
     sun.sun = True
     
     earth = Planet(-1 * Planet.AU, 0, 8,BLUE, 5.9742 * 10 ** 24)
-    earth.y_vel = 29.783 * 1000
+    earth.y_vel = 29.783 * 1000 # Probably Determined by Energy, like (2*sun.mass*self.G/self.distance_to_sun)**0.5
     
     mars = Planet(-1.524 * Planet.AU, 0, 6, RED, 6.39 * 10 ** 23)
     mars.y_vel = 24.077 * 1000
