@@ -2,7 +2,7 @@ import pygame
 import math
 pygame.init()
 
-WIDTH, HEIGHT = 400, 400
+WIDTH, HEIGHT = 800, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Planet Simulation")
 
@@ -15,7 +15,7 @@ DARK_GREY = (80, 78, 81)
 class Planet:
     AU = (149.6e6 * 1000)
     G = 6.67428e-11
-    SCALE = 100 / AU
+    SCALE = 250 / AU
     TIMESTEP = 3600*24 # 1 day
     
     def __init__(self, x, y, radius, color, mass):
@@ -35,7 +35,7 @@ class Planet:
     def draw(self, win):
         x = self.x * self.SCALE + WIDTH / 2
         y = self.y * self.SCALE + HEIGHT / 2
-        pygame.draw.circle(win, self.color, (x,y), self.radius)
+        pygame.draw.circle(win, self.color, (int(x),int(y)), self.radius)
         
     def attraction(self, other):
         other_x, other_y = other.x, other.y
@@ -67,7 +67,7 @@ class Planet:
         
         self.x += self.x_vel * self.TIMESTEP
         self.y += self.y_vel * self.TIMESTEP
-        self.orbit.append((self.x,self.y))
+        self.orbit.append((self.x,self.y)) # As a list
         
         #F = m * a 
         #a = f / m 
@@ -81,16 +81,18 @@ def main():
     sun.sun = True
     
     earth = Planet(-1 * Planet.AU, 0, 8,BLUE, 5.9742 * 10 ** 24)
-    earth.y_vel = 29.783 * 1000 # Probably Determined by Energy, like (2*sun.mass*self.G/self.distance_to_sun)**0.5
+    earth.y_vel = ((2*sun.mass*Planet.G) / (2 * 1 * Planet.AU))**0.5 # When Gravitational potential is oscillating between two points of opposite directions
+
+    # y velocity is determined by ((2*Mass of sun*G)/(initial distance to sun - another distance to sun))**0.5. From dE = (1/2)*m*v**2 - (GMm/(r1 - r2)) = dT + dU = 0, while Energy's change is zero if Energy is conserved through time.
     
     mars = Planet(-1.524 * Planet.AU, 0, 6, RED, 6.39 * 10 ** 23)
-    mars.y_vel = 24.077 * 1000
+    mars.y_vel = ((2*sun.mass*Planet.G) / (2* 1.524 * Planet.AU))**0.5
     
     mercury = Planet(0.387 * Planet.AU, 0, 4, DARK_GREY, 0.330 * 10 ** 24)
-    mercury.y_vel = -47.4 * 1000
-    
+    mercury.y_vel = - ((2*sun.mass*Planet.G) / (2 * 0.387 * Planet.AU))**0.5
+
     venus = Planet(0.723 * Planet.AU, 0, 7, WHITE, 4.8685 * 10 ** 24)
-    venus.y_vel = -35.02 * 1000
+    venus.y_vel = - ((2*sun.mass*Planet.G) / (2 * 0.723 * Planet.AU))**0.5
     
     planets = [sun, earth, mars, mercury, venus]
     
